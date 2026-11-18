@@ -3,6 +3,7 @@ package pdfserver.certservice.certification;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
@@ -20,20 +21,17 @@ public class CertificateController {
 
     private final CertificateService service;
 
-        public record IssueRequest(String subjectName, String keyPayload) {
-        }
-
     @PostMapping
-    public ResponseEntity<CertificateRecord> issue(@RequestBody IssueRequest request) {
+    public ResponseEntity<CertificateRecord> issue(@Valid @RequestBody CertificateIssueRequest request) {
         CertificateRecord saved = service.issuePlaceholdeRecord(
                 request.subjectName(),
                 request.keyPayload());
         return ResponseEntity.ok(saved);
     }
 
-        @GetMapping("/{id}")
-        public ResponseEntity<CertificateRecord> view(@PathVariable UUID id) {
-            return ResponseEntity.ok(service.getCertificate(id));
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<CertificateRecord> view(@PathVariable UUID id) {
+        return ResponseEntity.ok(service.getCertificate(id));
+    }
 
 }
