@@ -23,9 +23,7 @@ public class CertificateController {
 
     @PostMapping
     public ResponseEntity<CertificateRecord> issue(@Valid @RequestBody CertificateIssueRequest request) {
-        CertificateRecord saved = service.issuePlaceholdeRecord(
-                request.subjectName(),
-                request.keyPayload());
+        CertificateRecord saved = service.issueCertificate(request);
         return ResponseEntity.ok(saved);
     }
 
